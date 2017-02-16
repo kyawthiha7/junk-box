@@ -25,7 +25,7 @@ def createPattern(size):
 	pattern = "".join(pattern)
 	return pattern
 
-def findOffsetInPattern(pat,args={}):
+def findOffset(pat,args={}):
 	
 	mspattern = createPattern(sys.argv[3])
 	if pat in mspattern:
@@ -44,7 +44,7 @@ def main():
 		a = createPattern(sys.argv[2]);
 		print a;
 	elif args.query:
-		findOffsetInPattern(sys.argv[2],sys.argv[3]);
+		findOffset(sys.argv[2],sys.argv[3]);
 
 if __name__ =="__main__":
 	main();
