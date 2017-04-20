@@ -1,52 +1,48 @@
-#!/usr/bin/python
-import socket,sys,urllib
-import optparse
-from bs4 import BeautifulSoup
+ lxml import html
+
+def head(url):
+        r = requests.get(url)
+        header = r.headers
+        for item, value in  header.items():
+                print item+ " : " + value
 
 def spider(url):
-	url=str(url)
-	request = urllib.urlopen(url)
-	bs = BeautifulSoup(request.read(),"lxml")
-	link = bs.find_all('a')
-	for links in link:
-		print links['href']
+        r = requests.get(url)
+        page = html.fromstring(r.content)
+        link = page.xpath('//a/@href')
+        for item in link:
+                print item
 
-def head(header):
-	url=str(header)
-	request = urllib.urlopen(url)
-	for item, value in request.headers.items():
-		print item + ": " +value
-def port(host):
-	for port in range(1,35565):
-		try:
-			s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-			s.connect((host, port))
-			timeout = s.settimeout(2.0)
-			try:
-				s.recv(1024)
-				print("[+] Port %d: is open " % (port))
-			except:
-				print("[+] Port %d: is open " % (port))
-		except:	pass
-	s.close()
-
+def portscan(host):
+        for port in range(1,1025):
+                s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                s.settimeout(0.5)
+                res = s.connect_ex((host,port))
+                if (res ==0 ):
+                        print "open {0} at {1}".format(port,host)
+                s.close
+#               except KeyboardInterrupt:
+#                       print "you press Ctrl+C"
+#                       sys.exit
+#               except socket.error:
+#                       print "couldn't connect"
+#                       sys.exit
 def main():
-	#parser
-	parser = optparse.OptionParser(sys.argv[0]+''+ ' -c url  -p host -d url')
-	parser.add_option('-c' , dest='url', type='string', help='spidering')
-	parser.add_option('-p', dest='host', type='string', help='port scan')
-	parser.add_option('-d', dest='header', type='string', help='header')
-	(options, args) = parser.parse_args()
-	url = options.url
-	host = options.host
-	header = options.header
-	if url:
-		spider(url)
-	if host:
-		port(host)
-	if header:
-		head(header)
-	else:
-		print parser.usage
+        parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter)
+        parser.add_argument("-H","--header", help= " show http header usage: -H http://example.com", type=str)
+        parser.add_argument("-S","--spider",help="spidering usage: -S http://example.com", type=str)
+        parser.add_argument("-P","--portscan",help="scanning port usage: -P IP", type=str)
+        args = parser.parse_args()
 
-main()
+        if len(sys.argv[1:])==0 :
+                parser.print_help();
+
+        if args.header:
+                head(sys.argv[2]);
+        if args.spider:
+                spider(sys.argv[2]);
+        if args.portscan:
+                portscan(sys.argv[2]);
+
+if __name__ == "__main__":
+        main();
