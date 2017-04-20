@@ -21,12 +21,7 @@ def portscan(host):
                 if (res ==0 ):
                         print "open {0} at {1}".format(port,host)
                 s.close
-#               except KeyboardInterrupt:
-#                       print "you press Ctrl+C"
-#                       sys.exit
-#               except socket.error:
-#                       print "couldn't connect"
-#                       sys.exit
+
 def main():
         parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter)
         parser.add_argument("-H","--header", help= " show http header usage: -H http://example.com", type=str)
