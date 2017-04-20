@@ -1,5 +1,5 @@
 from cmd import Cmd
-import requests,socket,sys
+import requests,socket,sys,re
 from lxml import html
 
 class MyPrompt(Cmd):
