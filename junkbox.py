@@ -1,14 +1,17 @@
 from cmd import Cmd
 import requests,socket,sys,re
 from lxml import html
+from bs4 import BeautifulSoup
 
 class MyPrompt(Cmd):
     def do_head( args, url):
-
-	r = requests.get(url)
-	header = r.headers
-	for item, value in header.items():
-		print item+" : "+value
+	try:
+		r = requests.get(url)
+		header = r.headers
+		for item, value in header.items():
+			print item+" : "+value
+	except IOError:
+		print "Not valid URL, Sample URL is http://www.example.com"
 
     def do_createPattern(args, size):
 	char1="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -40,11 +43,14 @@ class MyPrompt(Cmd):
 		print "pattern offset is %s " %p
 
     def do_spider(args, url):
-	r = request.get(url)
-	page = html.fromstring(r.content)
-	link = page.xpath('//a/@href')
-	for item in link:
-		print item
+	try:
+		r = requests.get(url)
+		page = html.fromstring(r.content)
+		link = page.xpath('//a/@href')
+		for item in link:
+			print item
+	except IOError:
+		print "Not valid URL, url format is http://www.example.com"	
 
     def do_portscan(args, host):
        
@@ -66,6 +72,7 @@ class MyPrompt(Cmd):
 		hx = hx[8:]
 	for i in o:
 		print "reverse hex for string "+st+ " is " + i
+
     def do_search(args, st):
         temp = []
         url = 'http://www.google.com/search'
@@ -82,7 +89,18 @@ class MyPrompt(Cmd):
                 except:
                         continue
         for l in temp:
-                print l
+		print l
+
+    def do_whois(args, query):
+	url = "https://www.internic.net/cgi/whois"
+	payload = {'whois_nic' : query ,'type' : 'domain'}
+	agent = {'User-agent': 'Mozilla/11.0'}
+	r = requests.get(url,params=payload,headers=agent)
+	page = r.content
+	soup = BeautifulSoup(page, "lxml")
+	text = soup.find('pre').find(text=True)
+	print text
+
 
     def do_quit(self, args):
         """Quits the program."""
@@ -103,6 +121,8 @@ class MyPrompt(Cmd):
 		print "usage : findOffset $pat $SIZE"
     def help_search(self):
 		print "usage: search $Strings"
+    def help_whois(self):
+		print "usage: whois $DOMAIN"
 
 if __name__ == '__main__':
     print "\n "
@@ -121,4 +141,4 @@ if __name__ == '__main__':
 
     prompt = MyPrompt()
     prompt.prompt = 'myjunkbox> '
-    prompt.cmdloop('Starting prompt...')
+    prompt.cmdloop('Starting JUNK BOX..')
