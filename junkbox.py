@@ -15,7 +15,8 @@ if __name__ == '__main__':
     print " Code by : Kyaw Thiha"
     print " http://kth.ninja "
     print " ---------------------- "
-
-    prompt = MyClass.MyPrompt()
+    
+   	
+    prompt = ReCon.ReCon()
     prompt.prompt = 'myjunkbox> '
     prompt.cmdloop('Starting JUNK BOX..')

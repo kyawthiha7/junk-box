@@ -3,7 +3,7 @@ import requests,socket,sys,re
 from lxml import html
 from bs4 import BeautifulSoup
 
-class MyPrompt(Cmd):
+class ReCon(Cmd):
     def do_head( args, url):
 	try:
 		r = requests.get(url)
@@ -33,8 +33,12 @@ class MyPrompt(Cmd):
 					if len(pattern) < max:
 						pattern.append(ch3)
 
-	pattern = "".join(pattern)   
-	print pattern
+	pattern = "".join(pattern)
+	print pattern 
+	print " -------------"
+	print "file is written in pattern.txt"
+	with open('pattern.txt','w') as f:
+		print >> f, pattern
 
     def do_findOffset(args, pat,size):
 	mspattern = createPattern(size)
@@ -49,6 +53,10 @@ class MyPrompt(Cmd):
 		link = page.xpath('//a/@href')
 		for item in link:
 			print item
+			print " --------"
+			print "output is written in url.txt"
+			with open("url.txt",'w') as f:
+				print >>f, item
 	except IOError:
 		print "Not valid URL format, url format is http://www.example.com"	
 
@@ -123,5 +131,3 @@ class MyPrompt(Cmd):
 		print "usage: search $Strings"
     def help_whois(self):
 		print "usage: whois $DOMAIN"
-
-
