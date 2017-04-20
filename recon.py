@@ -1,4 +1,5 @@
- lxml import html
+import argparse,requests,sys,socket
+from llxml import html
 
 def head(url):
         r = requests.get(url)
