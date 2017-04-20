@@ -3,7 +3,43 @@ import requests,socket,sys,re
 from lxml import html
 from bs4 import BeautifulSoup
 
+
+def createPattern(size):
+        char1="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        char2="abcdefghijklmnopqrstuvwxyz"
+        char3="0123456789"
+
+        pattern = []
+        max = int(size)
+        while len(pattern) < max:
+                for ch1 in char1:
+                        for ch2 in char2:
+                                for ch3 in char3:
+                                        if len(pattern) < max:
+                                                pattern.append(ch1)
+
+                                        if len(pattern) < max:
+                                                pattern.append(ch2)
+
+                                        if len(pattern) < max:
+                                                pattern.append(ch3)
+
+        pattern = "".join(pattern)
+        return pattern
+
+
 class ReCon(Cmd):
+    def do_createPattern(args,size):
+	createPattern(size)
+
+    def do_findOffset(self, line):
+        pat,size = [str(s) for s in line.split()]
+	mspattern = createPattern(size)
+        if pat in mspattern:
+                p = mspattern.index(pat)
+                print "pattern offset is %s " %p
+
+
     def do_head( args, url):
 	try:
 		r = requests.get(url)
@@ -13,39 +49,7 @@ class ReCon(Cmd):
 	except IOError:
 		print "Not valid URL format, Sample URL format is http://www.example.com"
 
-    def do_createPattern(args, size):
-	char1="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	char2="abcdefghijklmnopqrstuvwxyz"
-	char3="0123456789"
-			
-	pattern = []
-	max = int(size)
-	while len(pattern) < max:
-		for ch1 in char1:
-			for ch2 in char2:
-				for ch3 in char3:
-					if len(pattern) < max:
-						pattern.append(ch1)
-
-					if len(pattern) < max:
-						pattern.append(ch2)
-
-					if len(pattern) < max:
-						pattern.append(ch3)
-
-	pattern = "".join(pattern)
-	print pattern 
-	print " -------------"
-	print "file is written in pattern.txt"
-	with open('pattern.txt','w') as f:
-		print >> f, pattern
-
-    def do_findOffset(args, pat,size):
-	mspattern = createPattern(size)
-	if pat in mspattern:
-		p = mspattern.index(pat)
-		print "pattern offset is %s " %p
-
+	
     def do_spider(args, url):
 	try:
 		r = requests.get(url)
@@ -81,10 +85,11 @@ class ReCon(Cmd):
 	for i in o:
 		print "reverse hex for string "+st+ " is " + i
 
-    def do_search(args, st):
+    def do_search(self, line):
         temp = []
+	st,no = [str(s) for s in line.split()]
         url = 'http://www.google.com/search'
-        payload  = {'q' : st , 'start' : '0'}
+        payload  = {'q' : st , 'start' : '0', 'num' : no}
         my_head = {'User-agent': 'Mozilla/11.0'}
 
         r = requests.get(url, params=payload, headers=my_head)

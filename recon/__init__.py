@@ -1,1 +1,2 @@
-__all__ = ["ReCon"]
+__all__ = ["ReCon",
+	"PatternCreate"]
