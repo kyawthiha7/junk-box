@@ -11,7 +11,7 @@ class MyPrompt(Cmd):
 		for item, value in header.items():
 			print item+" : "+value
 	except IOError:
-		print "Not valid URL, Sample URL is http://www.example.com"
+		print "Not valid URL format, Sample URL format is http://www.example.com"
 
     def do_createPattern(args, size):
 	char1="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -50,7 +50,7 @@ class MyPrompt(Cmd):
 		for item in link:
 			print item
 	except IOError:
-		print "Not valid URL, url format is http://www.example.com"	
+		print "Not valid URL format, url format is http://www.example.com"	
 
     def do_portscan(args, host):
        
