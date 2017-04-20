@@ -1,5 +1,6 @@
 from cmd import Cmd
 import requests,socket,sys
+from lxml import html
 
 class MyPrompt(Cmd):
     def do_head( args, url):
@@ -65,6 +66,23 @@ class MyPrompt(Cmd):
 		hx = hx[8:]
 	for i in o:
 		print "reverse hex for string "+st+ " is " + i
+    def do_search(args, st):
+        temp = []
+        url = 'http://www.google.com/search'
+        payload  = {'q' : st , 'start' : '0'}
+        my_head = {'User-agent': 'Mozilla/11.0'}
+
+        r = requests.get(url, params=payload, headers=my_head)
+
+        page = html.fromstring(r.content)
+        link = page.xpath('//h3[1]/a/@href')
+        for i in link:
+                try:
+                        temp.append(re.search("url\?q=(.+?)\&sa",i).group(1))
+                except:
+                        continue
+        for l in temp:
+                print l
 
     def do_quit(self, args):
         """Quits the program."""
@@ -83,6 +101,8 @@ class MyPrompt(Cmd):
 		print "usage : createPattern SIZE"
     def help_findOffset(self):
 		print "usage : findOffset $pat $SIZE"
+    def help_search(self):
+		print "usage: search $Strings"
 
 if __name__ == '__main__':
     prompt = MyPrompt()
