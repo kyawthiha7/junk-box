@@ -1,3 +1,20 @@
+## step
+- attach to process
+- allocate memory 
+- copy dll to process memory
+- make process to execute my dll
+
+
+## function
+- OpenProcess()
+- VirtualAllocEx()
+- WritePorcessMemory()
+- CreateRemoteThread()
+
+
+## code sample
+
+```
 #include <iostream>
 #include <Windows.h>
 
@@ -36,3 +53,4 @@ int main()
 
 	return 0;
 }
+```
